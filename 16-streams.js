@@ -1,8 +1,9 @@
-const http = require('http')
+const { createReadStream } = require("fs");
 
-const server = http.createServer()
-server.on('request', (req, res) => {
-  res.end('Welcome')
-})
+const stream = createReadStream("../content/big.txt", { highWaterMark: 90000 });
 
-server.listen(5000)
+stream.on("data", (result) => {
+  console.log(result);
+});
+
+stream.on('error', (err) => console.log(err))
