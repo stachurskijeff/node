@@ -1,19 +1,20 @@
-const express = require('express')
-const path = require('path')
-const app = express()
+const express = require("express");
+const app = express();
 
-//setup static and middleware
-app.use(express.static('./public/navbar-app'))
+const people = require('./routes/people')
+const auth = require('./routes/auth')
 
-app.get('/', (req,res)=> {
-res.sendFile(path.resolve(__dirname,'./navbar-app/index.html'))
-})
+// static assets
+app.use(express.static("./methods-public"));
+// parse form data
+app.use(express.urlencoded({ extended: false }));
+// parse json
+app.use(express.json());
 
-app.all('*', (req, res) =>{
-    res.status(404).send('resource not found')
-})
+app.use('/api/people', people)
 
+app.use('/login', auth)
 
 app.listen(2137, () => {
-    console.log('server is listening on port 2137...')
-})
+  console.log("Server is listening on port 2137....");
+});
